@@ -252,7 +252,7 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 ### Named vs Anonymous Functions
 ###### [Style [Y024](#style-y024)]
 
-  - Use named functions instead of passing an anonymous function in as a callback.
+  - Use named functions instead of passing an anonymous function in as a callback, except for the topmost function.
 
   *Why?*: This produces more readable code, is much easier to debug, and reduces the amount of nested callback code.
 
@@ -260,8 +260,11 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
   /* avoid */
   angular
       .module('app')
-      .controller('Dashboard', function() { })
-      .factory('logger', function() { });
+      .controller('DashboardController', function() { 
+        var vm = this;
+        vm.foo = function() { };
+        vm.bar = function() { };
+      });
   ```
 
   ```javascript
@@ -270,18 +273,14 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
   // dashboard.js
   angular
       .module('app')
-      .controller('Dashboard', Dashboard);
-
-  function Dashboard() { }
-  ```
-
-  ```javascript
-  // logger.js
-  angular
-      .module('app')
-      .factory('logger', logger);
-
-  function logger() { }
+      .controller('DashboardController', function() {
+        var vm = this;
+        vm.foo = foo;
+        vm.bar = bar;
+        
+        function foo() { };
+        function bar() { };
+      });
   ```
 
 **[Back to top](#table-of-contents)**
@@ -2006,7 +2005,7 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
      * recommended
      */
 
-    // avenger-profile.directive.js
+    // xx-avenger-profile.directive.js
     angular
         .module
         .directive('xxAvengerProfile', xxAvengerProfile);
